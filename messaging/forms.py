@@ -9,8 +9,8 @@ from .models import Message
 
 class MessageForm(forms.ModelForm):
     recipients = forms.ModelMultipleChoiceField(
-        queryset=User.objects.filter(is_active=True),
-        widget=forms.SelectMultiple(attrs={"class": "form-select", "size": 6}),
+        queryset=User.objects.filter(is_active=True).order_by("full_name", "username"),
+        widget=forms.CheckboxSelectMultiple(attrs={"class": "form-check-input"}),
     )
 
     class Meta:

@@ -2,57 +2,92 @@
 {% block title %}Analytics{% endblock %}
 
 {% block extra_head %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"
-        defer></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 {% endblock %}
 
 {% block content %}
-<h1 class="h3">Analytics</h1>
-<p class="text-muted">
-    Two simple charts driven by JSON endpoints (so the same data is
-    consumable by any other dashboard tool too).
-</p>
+<div class="d-flex justify-content-between align-items-center mb-2">
+    <h1 class="h3 mb-0">Analytics</h1>
+    <small class="text-muted">live from the database</small>
+</div>
 
 <div class="row g-3">
     <div class="col-md-6">
         <div class="on-card">
-            <h2 class="h5">Teams per department</h2>
-            <canvas id="teamsPerDept" height="220"></canvas>
+            <h2 class="h6 mb-2">Teams per department</h2>
+            {# fixed-height wrapper stops Chart.js from growing the canvas every redraw #}
+            <div class="on-chart-box">
+                <canvas id="teamsPerDept"></canvas>
+            </div>
         </div>
     </div>
     <div class="col-md-6">
         <div class="on-card">
-            <h2 class="h5">Projects per department</h2>
-            <canvas id="projectsPerDept" height="220"></canvas>
+            <h2 class="h6 mb-2">Projects per department</h2>
+            <div class="on-chart-box">
+                <canvas id="projectsPerDept"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="on-card">
+            <h2 class="h6 mb-2">Team types</h2>
+            <div class="on-chart-box">
+                <canvas id="teamTypes"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="on-card">
+            <h2 class="h6 mb-2">Project status mix</h2>
+            <div class="on-chart-box">
+                <canvas id="projectStatus"></canvas>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+(function () {
+    var palette = ["#1b4965", "#5fa8d3", "#62b6cb", "#cae9ff", "#bee9e8",
+                   "#1f9d55", "#d97706", "#6f42c1"];
+
     function load(url, canvasId, kind) {
         fetch(url, { credentials: "same-origin" })
             .then(function (r) { return r.json(); })
             .then(function (data) {
-                new Chart(document.getElementById(canvasId).getContext("2d"), {
+                var ctx = document.getElementById(canvasId);
+                if (!ctx) return;
+                new Chart(ctx, {
                     type: kind,
                     data: {
                         labels: data.labels,
                         datasets: [{
                             label: "Count",
                             data: data.values,
-                            backgroundColor: "#1b4965",
-                        }],
+                            backgroundColor: kind === "bar"
+                                ? "#1b4965"
+                                : palette.slice(0, data.labels.length),
+                        }]
                     },
-                    options: { responsive: true, maintainAspectRatio: false },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: kind !== "bar" } },
+                        scales: kind === "bar"
+                            ? { y: { beginAtZero: true, ticks: { precision: 0 } } }
+                            : {}
+                    }
                 });
             });
     }
-    // Wait a tick so Chart.js has loaded.
-    setTimeout(function () {
-        load("{% url 'analytics:data_teams_per_dept' %}",   "teamsPerDept",   "bar");
-        load("{% url 'analytics:data_projects_per_dept' %}","projectsPerDept","bar");
-    }, 250);
-});
+
+    document.addEventListener("DOMContentLoaded", function () {
+        load("{% url 'analytics:data_teams_per_dept' %}",    "teamsPerDept",    "bar");
+        load("{% url 'analytics:data_projects_per_dept' %}", "projectsPerDept", "bar");
+        load("{% url 'analytics:data_team_types' %}",        "teamTypes",       "doughnut");
+        load("{% url 'analytics:data_project_status' %}",    "projectStatus",   "doughnut");
+    });
+})();
 </script>
 {% endblock %}

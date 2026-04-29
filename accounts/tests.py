@@ -148,6 +148,53 @@ class LoginAndLogoutTests(TestCase):
         self.assertIn("login", response["Location"])
 
 
+class PasswordValidatorTests(TestCase):
+    """Custom validators in accounts/validators.py."""
+
+    def _post(self, password):
+        return self.client.post(
+            reverse("accounts:register"),
+            {
+                "username": "weakpw",
+                "email": "weakpw@sky.example",
+                "full_name": "Weak Pw",
+                "password1": password,
+                "password2": password,
+            },
+        )
+
+    def test_password_without_uppercase_rejected(self):
+        """UC02-04. Pre: none. Steps: register with password
+        'alllowercase1!'. Expected: 200 with 'uppercase' in errors,
+        no user persisted. Priority: HIGH (security)."""
+        r = self._post("alllowercase1!")
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, "uppercase")
+        self.assertFalse(User.objects.filter(username="weakpw").exists())
+
+    def test_password_without_symbol_rejected(self):
+        """UC02-05. Pre: none. Steps: register with 'GoodPassword1'.
+        Expected: 200 with 'symbol' in errors. Priority: HIGH."""
+        r = self._post("GoodPassword1")
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, "symbol")
+
+    def test_password_with_space_rejected(self):
+        """UC02-06. Pre: none. Steps: register with 'Good Password1!'
+        (contains a space). Expected: 200 with 'spaces' in errors.
+        Priority: MEDIUM."""
+        r = self._post("Good Password1!")
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, "spaces")
+
+    def test_password_meeting_all_rules_accepted(self):
+        """UC02-07. Pre: none. Steps: register with 'GoodPassword1!'.
+        Expected: 302 redirect, user is created. Priority: HIGH."""
+        r = self._post("GoodPassword1!")
+        self.assertEqual(r.status_code, 302)
+        self.assertTrue(User.objects.filter(username="weakpw").exists())
+
+
 class ProfileTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(

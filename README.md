@@ -56,6 +56,26 @@ Open http://127.0.0.1:8000/ and either log in or register a new account.
 Email backend defaults to console output, so the verification link will
 appear in the terminal where `runserver` is running.
 
+## Real emails (Resend)
+
+By default the dev server saves emails to `dev_outbox/` as `.log` files
+and shows them at `/accounts/dev/outbox/`, so the marker can pick up
+verification + password-reset links without any external setup.
+
+To send real emails (same as we did in our FYP), grab a free API key
+from https://resend.com (3,000 emails / month on the free tier) and:
+
+```bash
+export RESEND_API_KEY="re_your_key_here"
+export ORGNEXUS_FROM_EMAIL="OrgNexus <onboarding@resend.dev>"
+python manage.py email_test --to your.email@example.com
+```
+
+The settings module auto-detects `RESEND_API_KEY` and points Django's
+SMTP backend at Resend's gateway (`smtp.resend.com:587`, STARTTLS,
+username `resend`, password = the API key). Restart `runserver` after
+exporting and verification + reset emails arrive in real inboxes.
+
 ## Test users
 
 After running `load_seed`, you can log in with these accounts (all have

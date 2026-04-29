@@ -8,10 +8,13 @@ from .models import Meeting
 
 
 class MeetingForm(forms.ModelForm):
+    # Checkboxes are a bit verbose for ~240 users but together with the
+    # client-side search box on the meeting_form template it's the best
+    # readable picker we can build without adding a JS dependency.
     invitees = forms.ModelMultipleChoiceField(
-        queryset=User.objects.filter(is_active=True),
+        queryset=User.objects.filter(is_active=True).order_by("full_name", "username"),
         required=False,
-        widget=forms.SelectMultiple(attrs={"class": "form-select", "size": 6}),
+        widget=forms.CheckboxSelectMultiple(attrs={"class": "form-check-input"}),
     )
 
     class Meta:

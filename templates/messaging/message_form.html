@@ -6,10 +6,31 @@
 
 <form method="post" class="on-card">
     {% csrf_token %}
+
     <div class="mb-3">
         <label class="form-label">To</label>
-        {{ form.recipients }}
+        <div class="on-people-picker">
+            <div class="on-people-picker-search">
+                <input type="search" id="recipient-filter"
+                       class="form-control form-control-sm"
+                       placeholder="Type to filter people...">
+            </div>
+            <div class="on-people-picker-list" id="recipient-list">
+                {% for choice in form.recipients %}
+                    <div class="form-check on-person">
+                        {{ choice.tag }}
+                        <label class="form-check-label" for="{{ choice.id_for_label }}">
+                            {{ choice.choice_label }}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% if form.recipients.errors %}
+            <div class="text-danger small">{{ form.recipients.errors|striptags }}</div>
+        {% endif %}
     </div>
+
     <div class="mb-3">
         <label class="form-label">Subject</label>
         {{ form.subject }}
@@ -17,10 +38,12 @@
             <div class="text-danger small">{{ form.subject.errors|striptags }}</div>
         {% endif %}
     </div>
+
     <div class="mb-3">
         <label class="form-label">Message</label>
         {{ form.body }}
     </div>
+
     <div class="d-flex gap-2">
         <button type="submit" name="action" value="send" class="btn btn-on">Send</button>
         <button type="submit" name="action" value="draft" class="btn btn-on-outline">
@@ -29,4 +52,19 @@
         <a class="btn btn-link" href="{% url 'messaging:inbox' %}">Cancel</a>
     </div>
 </form>
+
+<script>
+(function () {
+    var box = document.getElementById("recipient-filter");
+    var list = document.getElementById("recipient-list");
+    if (!box || !list) return;
+    box.addEventListener("input", function () {
+        var q = box.value.toLowerCase();
+        list.querySelectorAll(".on-person").forEach(function (row) {
+            var label = row.querySelector("label").textContent.toLowerCase();
+            row.style.display = (!q || label.indexOf(q) !== -1) ? "" : "none";
+        });
+    });
+})();
+</script>
 {% endblock %}

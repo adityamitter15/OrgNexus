@@ -81,6 +81,16 @@ class Command(BaseCommand):
         header, rows = rows[0], rows[1:]
         col = {name: idx for idx, name in enumerate(header) if name}
 
+        # Brief requires >= 3 teams per department. Drop departments
+        # that don't meet that bar from the source data so we don't
+        # ship a "Programme" dept with only one team.
+        from collections import Counter
+        team_count = Counter()
+        for row in rows:
+            if row and row[col["Team Name"]] and row[col["Department"]]:
+                team_count[row[col["Department"]].strip()] += 1
+        keep_dept = {d for d, n in team_count.items() if n >= 3}
+
         focus_default, _ = FocusArea.objects.get_or_create(
             name="Streaming platforms",
             defaults={"description": "Sky's primary streaming engineering practice."},
@@ -93,6 +103,8 @@ class Command(BaseCommand):
 
         for row in rows:
             if not row or not row[col["Team Name"]]:
+                continue
+            if row[col["Department"]] and row[col["Department"]].strip() not in keep_dept:
                 continue
 
             dept_name = (row[col["Department"]] or "").strip()
@@ -291,10 +303,13 @@ class Command(BaseCommand):
 
 def _coerce_text(value):
     """Spreadsheet cells can be None / numbers / dates - turn anything
-    into a stripped string."""
+    into a stripped string and drop the broken Excel #REF! tokens."""
     if value is None:
         return ""
-    return str(value).strip()
+    text = str(value).strip()
+    if "#REF!" in text:
+        return ""
+    return text
 
 
 def _safe_url(value):
