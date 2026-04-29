@@ -31,12 +31,16 @@ html, body { height: 100%; }
 /* Navbar -----------------------------------------------------------*/
 .on-navbar { border-bottom: 1px solid var(--on-border); }
 
-.on-logo-dot {
-    display: inline-block;
-    width: 24px; height: 24px;
-    border-radius: 50%;
-    background: var(--on-primary);
-    box-shadow: 0 0 0 4px var(--on-primary-soft);
+.on-logo-icon {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+}
+.on-auth-card .on-logo-mark {
+    display: block;
+    margin: 0 auto 1rem;
+    width: 72px;
+    height: 72px;
 }
 
 .on-avatar {
@@ -154,6 +158,39 @@ html, body { height: 100%; }
     background: var(--on-card);
     border-top: 1px solid var(--on-border);
 }
+
+/* Password show/hide and live rules ---------------------------------*/
+.on-pw-wrap { display: block; }
+.on-pw-toggle {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--on-muted);
+    padding: 0.25rem 0.5rem;
+}
+.on-pw-toggle:hover { color: var(--on-primary); }
+
+.on-pw-rules {
+    list-style: none;
+    padding: 0;
+    margin: .25rem 0 0 0;
+    font-size: 0.85rem;
+}
+.on-pw-rules .on-rule {
+    color: var(--on-muted);
+    padding: 0.1rem 0;
+}
+.on-pw-rules .on-rule.ok {
+    color: var(--on-accent-green);
+}
+.on-pw-rules .on-rule.miss { color: #b45309; }
+
+/* Auth-page hero  --------------------------------------------------*/
+.on-auth-card .form-control { border-radius: .5rem; }
+.on-auth-card hr { border-color: var(--on-border); }
 
 /* Alerts -----------------------------------------------------------*/
 .on-alert.alert-info    { border-left: 4px solid var(--on-primary); }

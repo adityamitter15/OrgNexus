@@ -13,6 +13,11 @@ app_name = "accounts"
 
 
 urlpatterns = [
+    # Dev-only outbox viewer (gated on DEBUG inside the view so the URL
+    # exists in routing tables but 404s in production).
+    path("dev/outbox/", views.dev_outbox, name="dev_outbox"),
+    path("dev/outbox/<path:filename>/", views.dev_outbox_message, name="dev_outbox_message"),
+
     # Self-registration + email verification flow (FYP-style but using
     # Django's signed-token machinery instead of a JWT).
     path("register/", views.RegisterView.as_view(), name="register"),

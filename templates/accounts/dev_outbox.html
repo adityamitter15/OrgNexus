@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Dev outbox{% endblock %}
+
+{% block content %}
+<h1 class="h3">Dev email outbox</h1>
+<p class="text-muted small">
+    Visible only in DEBUG mode. The Django file-based email backend drops
+    every email here as a .log file so you can read verification links
+    and password-reset links without configuring SMTP.
+</p>
+
+{% if items %}
+    <div class="on-card">
+        <table class="on-table w-100">
+            <thead>
+                <tr><th>Subject</th><th>To</th><th>Date</th><th></th></tr>
+            </thead>
+            <tbody>
+                {% for it in items %}
+                    <tr>
+                        <td>{{ it.subject }}</td>
+                        <td class="small text-muted">{{ it.to }}</td>
+                        <td class="small text-muted">{{ it.date }}</td>
+                        <td>
+                            <a class="btn btn-sm btn-on"
+                               href="{% url 'accounts:dev_outbox_message' it.filename %}">
+                                Open
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="on-card text-center py-4">
+        <p class="text-muted mb-0">
+            Outbox is empty - register an account or use "Forgot password"
+            to drop a message here.
+        </p>
+    </div>
+{% endif %}
+{% endblock %}

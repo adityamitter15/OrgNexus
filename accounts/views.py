@@ -11,12 +11,17 @@ Highlights for the report:
       page, not a form.
 """
 
+from email import message_from_bytes
+from email.policy import default as default_policy
+from pathlib import Path
+
 from django.conf import settings
 from django.contrib import messages as django_messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import LoginView
 from django.core.mail import send_mail
+from django.http import Http404
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
@@ -169,3 +174,73 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         django_messages.success(self.request, "Profile updated.")
         return super().form_valid(form)
+
+
+# --- Dev-only email outbox view ----------------------------------------
+
+def _outbox_files():
+    """Return the .eml files Django's filebased backend dropped, newest first."""
+    outbox = Path(getattr(settings, "EMAIL_FILE_PATH", "")) if getattr(
+        settings, "EMAIL_FILE_PATH", None) else None
+    if not outbox or not outbox.exists():
+        return []
+    return sorted(outbox.glob("*.log"), key=lambda p: p.stat().st_mtime, reverse=True)
+
+
+def dev_outbox(request):
+    """Lists emails written by the file backend during dev. Disabled in
+    production - the marker can use this to click verification and
+    password-reset links instead of digging through the runserver log."""
+    if not settings.DEBUG:
+        raise Http404()
+    items = []
+    for path in _outbox_files()[:50]:
+        # Each .log file can contain >= 1 messages separated by a blank
+        # line - we only show the first one for the listing.
+        try:
+            raw = path.read_bytes()
+            msg = message_from_bytes(raw, policy=default_policy)
+            items.append({
+                "filename": path.name,
+                "subject": msg.get("Subject", "(no subject)"),
+                "to": msg.get("To", ""),
+                "date": msg.get("Date", ""),
+            })
+        except Exception:
+            items.append({
+                "filename": path.name,
+                "subject": "(unreadable)",
+                "to": "",
+                "date": "",
+            })
+    return render(request, "accounts/dev_outbox.html", {"items": items})
+
+
+def dev_outbox_message(request, filename):
+    if not settings.DEBUG:
+        raise Http404()
+    outbox = Path(settings.EMAIL_FILE_PATH)
+    target = outbox / filename
+    # Path-traversal guard - the file must live inside the outbox dir.
+    try:
+        target.resolve().relative_to(outbox.resolve())
+    except ValueError:
+        raise Http404()
+    if not target.exists():
+        raise Http404()
+    raw = target.read_bytes()
+    msg = message_from_bytes(raw, policy=default_policy)
+    body = msg.get_body(preferencelist=("plain",))
+    text = body.get_content() if body else "(no plain-text body)"
+    return render(
+        request,
+        "accounts/dev_outbox_message.html",
+        {
+            "subject": msg.get("Subject", ""),
+            "to": msg.get("To", ""),
+            "from_": msg.get("From", ""),
+            "date": msg.get("Date", ""),
+            "body": text,
+            "filename": filename,
+        },
+    )

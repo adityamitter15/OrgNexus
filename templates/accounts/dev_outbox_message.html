@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}{{ subject }}{% endblock %}
+
+{% block content %}
+<a class="small" href="{% url 'accounts:dev_outbox' %}">&larr; Back to outbox</a>
+
+<div class="on-card mt-2">
+    <h1 class="h4">{{ subject }}</h1>
+    <p class="small text-muted mb-1"><strong>From:</strong> {{ from_ }}</p>
+    <p class="small text-muted mb-1"><strong>To:</strong> {{ to }}</p>
+    <p class="small text-muted">{{ date }}</p>
+    <hr>
+    <pre style="white-space: pre-wrap; font-family: system-ui;">{{ body }}</pre>
+</div>
+{% endblock %}

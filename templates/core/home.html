@@ -1,10 +1,13 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Welcome{% endblock %}
 
 {% block content %}
 <section class="row align-items-center mt-4">
     <div class="col-md-7">
-        <h1 class="display-5 fw-bold">OrgNexus</h1>
+        <img src="{% static 'img/logo.svg' %}" alt=""
+             style="width: 56px; height: 56px;" class="mb-2">
+        <h1 class="display-5 fw-bold mb-1">OrgNexus</h1>
         <p class="lead text-muted">
             Sky's central registry of engineering teams - find people,
             understand dependencies, and reach out without ever opening

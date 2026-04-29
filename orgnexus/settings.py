@@ -77,6 +77,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "core.context_processors.debug_flag",
             ],
         },
     },
@@ -178,18 +179,24 @@ AXES_LOCKOUT_PARAMETERS = ["username"]
 
 # --- Email backend -------------------------------------------------------
 
-# In dev we just dump emails to the console so we can see verification
-# links during demos. To wire a real SMTP server, override these env
-# vars - the README shows the example for Gmail/Outlook.
+# In dev we drop emails into BASE_DIR/dev_outbox/ as .eml files so the
+# user can read them from their browser at /accounts/dev/outbox/ - this
+# replaces the FYP project's Resend.com integration with something the
+# marker can run offline. Override ORGNEXUS_EMAIL_BACKEND to switch to
+# real SMTP - the README documents the Gmail app-password setup.
+DEV_OUTBOX = BASE_DIR / "dev_outbox"
+DEV_OUTBOX.mkdir(exist_ok=True)
+
 EMAIL_BACKEND = os.environ.get(
     "ORGNEXUS_EMAIL_BACKEND",
-    "django.core.mail.backends.console.EmailBackend",
+    "django.core.mail.backends.filebased.EmailBackend",
 )
-EMAIL_HOST = os.environ.get("ORGNEXUS_EMAIL_HOST", "localhost")
-EMAIL_PORT = int(os.environ.get("ORGNEXUS_EMAIL_PORT", "1025"))
+EMAIL_FILE_PATH = str(DEV_OUTBOX)
+EMAIL_HOST = os.environ.get("ORGNEXUS_EMAIL_HOST", "smtp.gmail.com")
+EMAIL_PORT = int(os.environ.get("ORGNEXUS_EMAIL_PORT", "587"))
 EMAIL_HOST_USER = os.environ.get("ORGNEXUS_EMAIL_USER", "")
 EMAIL_HOST_PASSWORD = os.environ.get("ORGNEXUS_EMAIL_PASS", "")
-EMAIL_USE_TLS = os.environ.get("ORGNEXUS_EMAIL_TLS", "0") == "1"
+EMAIL_USE_TLS = os.environ.get("ORGNEXUS_EMAIL_TLS", "1") == "1"
 DEFAULT_FROM_EMAIL = os.environ.get(
     "ORGNEXUS_FROM_EMAIL", "OrgNexus <noreply@orgnexus.local>"
 )

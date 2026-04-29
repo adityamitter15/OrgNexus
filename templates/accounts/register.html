@@ -1,27 +1,71 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Sign up{% endblock %}
 
 {% block content %}
 <div class="on-auth-card">
-    <h1>Create your account</h1>
-    <p class="text-muted">A verification link will be emailed once you submit.</p>
+    <img src="{% static 'img/logo.svg' %}" class="on-logo-mark" alt="">
+    <h1 class="text-center">Create your account</h1>
+    <p class="text-muted text-center">A verification link will be emailed once you submit.</p>
 
-    <form method="post">
+    <form method="post" novalidate>
         {% csrf_token %}
-        {% for field in form %}
-            <div class="mb-3">
-                <label class="form-label" for="{{ field.id_for_label }}">
-                    {{ field.label }}
-                </label>
-                {{ field }}
-                {% if field.help_text %}
-                    <div class="form-text">{{ field.help_text|safe }}</div>
-                {% endif %}
-                {% if field.errors %}
-                    <div class="form-text text-danger">{{ field.errors|striptags }}</div>
-                {% endif %}
+
+        {# Username, email, full name, job title - simple text inputs. #}
+        <div class="mb-3">
+            <label class="form-label" for="id_username">Username</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <div class="form-text text-danger">{{ form.username.errors|striptags }}</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="id_email">Work email</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+                <div class="form-text text-danger">{{ form.email.errors|striptags }}</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="id_full_name">Full name</label>
+            {{ form.full_name }}
+            {% if form.full_name.errors %}
+                <div class="form-text text-danger">{{ form.full_name.errors|striptags }}</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="id_job_title">Job title <small class="text-muted">(optional)</small></label>
+            {{ form.job_title }}
+        </div>
+
+        {# Password #1 - the one we run live rules against. #}
+        <div class="mb-3">
+            <label class="form-label" for="id_password1">Password</label>
+            <div class="on-pw-wrap">
+                <input type="password" name="password1" id="id_password1"
+                       class="form-control"
+                       autocomplete="new-password" required
+                       data-pw-rules="pw-rules"
+                       data-pw-similar-to="#id_username, #id_email, #id_full_name">
             </div>
-        {% endfor %}
+            <ul id="pw-rules" class="on-pw-rules"></ul>
+            {% if form.password1.errors %}
+                <div class="form-text text-danger">{{ form.password1.errors|striptags }}</div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="id_password2">Confirm password</label>
+            <div class="on-pw-wrap">
+                <input type="password" name="password2" id="id_password2"
+                       class="form-control"
+                       autocomplete="new-password" required>
+            </div>
+            {% if form.password2.errors %}
+                <div class="form-text text-danger">{{ form.password2.errors|striptags }}</div>
+            {% endif %}
+        </div>
+
         <button type="submit" class="btn btn-on w-100">Create account</button>
     </form>
 

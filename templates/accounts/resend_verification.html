@@ -14,5 +14,13 @@
         </div>
         <button type="submit" class="btn btn-on w-100">Resend link</button>
     </form>
+
+    {% if debug %}
+        <div class="alert alert-info small mt-3 mb-0">
+            <strong>Dev mode:</strong> emails are saved to a local file
+            outbox. <a href="{% url 'accounts:dev_outbox' %}">Open outbox</a>
+            to grab the verification link.
+        </div>
+    {% endif %}
 </div>
 {% endblock %}
