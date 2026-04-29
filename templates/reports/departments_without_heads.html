@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Departments without an active head{% endblock %}
+
+{% block content %}
+<h1 class="h3">Departments without an active head</h1>
+
+{% if departments %}
+    <div class="on-card">
+        <table class="on-table w-100">
+            <thead><tr><th>Department</th><th>Teams</th></tr></thead>
+            <tbody>
+                {% for d in departments %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'organisation:department_detail' d.slug %}">{{ d.name }}</a>
+                        </td>
+                        <td>{{ d.teams.count }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="on-card text-center py-4">
+        <p class="text-muted mb-0">Every department has an active head. Nice.</p>
+    </div>
+{% endif %}
+{% endblock %}

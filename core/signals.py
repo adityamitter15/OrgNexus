@@ -11,6 +11,7 @@ from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 from django.forms.models import model_to_dict
 
+from .middleware import get_current_user
 from .models import AuditLog
 
 
@@ -47,6 +48,7 @@ def audit_save(sender, instance, created, **kwargs):
     if not _is_watched(sender):
         return
     AuditLog.objects.create(
+        actor=get_current_user(),
         action=AuditLog.CREATE if created else AuditLog.UPDATE,
         table_name=sender._meta.label,
         row_id=str(getattr(instance, "pk", "")),
@@ -60,6 +62,7 @@ def audit_delete(sender, instance, **kwargs):
     if not _is_watched(sender):
         return
     AuditLog.objects.create(
+        actor=get_current_user(),
         action=AuditLog.DELETE,
         table_name=sender._meta.label,
         row_id=str(getattr(instance, "pk", "")),

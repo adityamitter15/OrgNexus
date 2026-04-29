@@ -50,6 +50,26 @@ def teams_without_managers(request):
 
 
 @login_required
+def departments_without_heads(request):
+    """Companion to the orphan-teams view - flags departments that
+    don't currently have an active department head (no row, or every
+    row has a stepped_down date)."""
+    from organisation.models import DepartmentHead
+    active_dept_ids = DepartmentHead.objects.filter(
+        stepped_down__isnull=True
+    ).values_list("department_id", flat=True)
+    depts = (
+        Department.objects.exclude(id__in=list(active_dept_ids))
+        .order_by("name")
+    )
+    return render(
+        request,
+        "reports/departments_without_heads.html",
+        {"departments": depts},
+    )
+
+
+@login_required
 def pdf_report(request):
     """Single-shot PDF: dept-by-dept summary table + projects per dept."""
 

@@ -62,6 +62,9 @@ MIDDLEWARE = [
 
     # axes goes last so it sees authenticate() failures.
     "axes.middleware.AxesMiddleware",
+
+    # Stash request.user on a threadlocal so audit signals can read it.
+    "core.middleware.CurrentUserMiddleware",
 ]
 
 ROOT_URLCONF = "orgnexus.urls"
@@ -111,7 +114,7 @@ AUTH_USER_MODEL = "accounts.User"
 # count failures, then Django's default backend does the actual lookup.
 AUTHENTICATION_BACKENDS = [
     "axes.backends.AxesStandaloneBackend",
-    "django.contrib.auth.backends.ModelBackend",
+    "accounts.backends.UsernameOrEmailBackend",
 ]
 
 
