@@ -163,6 +163,13 @@ SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_AGE = 60 * 60 * 8  # 8 hours - matches a Sky working day.
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+# Refresh the session expiry on every request so an active user is
+# not logged out mid-session.
+SESSION_SAVE_EVERY_REQUEST = True
+
+# Don't leak the full URL to third-party sites the user clicks
+# through to.
+SECURE_REFERRER_POLICY = "same-origin"
 
 CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SAMESITE = "Lax"

@@ -64,6 +64,14 @@ class Command(BaseCommand):
             "--engineers-per-team", type=int, default=5,
             help="How many synthetic Staff rows to add per team.",
         )
+        parser.add_argument(
+            "--max-teams-per-dept", type=int, default=3,
+            help="Cap teams per department - default = brief minimum (3).",
+        )
+        parser.add_argument(
+            "--max-departments", type=int, default=2,
+            help="Cap departments loaded - default = brief minimum (2).",
+        )
 
     @transaction.atomic
     def handle(self, *args, **opts):
@@ -81,15 +89,25 @@ class Command(BaseCommand):
         header, rows = rows[0], rows[1:]
         col = {name: idx for idx, name in enumerate(header) if name}
 
-        # Brief requires >= 3 teams per department. Drop departments
-        # that don't meet that bar from the source data so we don't
-        # ship a "Programme" dept with only one team.
+        # Brief asks for >= 2 dept, >= 3 teams/dept, >= 5 engineers/team.
+        # We default to those exact minimums so the seeded scale doesn't
+        # look implausible for a two-person student project. Bump via
+        # the --max-teams-per-dept and --max-departments flags.
         from collections import Counter
         team_count = Counter()
         for row in rows:
             if row and row[col["Team Name"]] and row[col["Department"]]:
                 team_count[row[col["Department"]].strip()] += 1
-        keep_dept = {d for d, n in team_count.items() if n >= 3}
+
+        # Need departments that have at least the configured team cap
+        # available in the registry (so we don't end up short).
+        min_teams = opts["max_teams_per_dept"]
+        eligible = [d for d, n in team_count.items() if n >= min_teams]
+        # Take the largest eligible departments first - more variety
+        # in seeded teams than picking alphabetically.
+        eligible.sort(key=lambda d: -team_count[d])
+        keep_dept = set(eligible[:opts["max_departments"]])
+        teams_taken = Counter()
 
         focus_default, _ = FocusArea.objects.get_or_create(
             name="Streaming platforms",
@@ -104,8 +122,13 @@ class Command(BaseCommand):
         for row in rows:
             if not row or not row[col["Team Name"]]:
                 continue
-            if row[col["Department"]] and row[col["Department"]].strip() not in keep_dept:
+            row_dept = (row[col["Department"]] or "").strip()
+            if row_dept not in keep_dept:
                 continue
+            # Stop adding teams to a dept once we've hit the cap.
+            if teams_taken[row_dept] >= opts["max_teams_per_dept"]:
+                continue
+            teams_taken[row_dept] += 1
 
             dept_name = (row[col["Department"]] or "").strip()
             team_name = (row[col["Team Name"]] or "").strip()
