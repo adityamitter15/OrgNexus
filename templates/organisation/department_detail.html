@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}{{ department.name }}{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="small mb-2">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+            <a href="{% url 'organisation:department_list' %}">Departments</a>
+        </li>
+        <li class="breadcrumb-item active">{{ department.name }}</li>
+    </ol>
+</nav>
+
+<h1 class="h3">{{ department.name }}</h1>
+<p class="text-muted">{{ department.specialisation|default:'No specialisation set.' }}</p>
+
+<div class="row g-3 mt-2">
+    <div class="col-lg-8">
+        <div class="on-card">
+            <h2 class="h5">Description</h2>
+            <p class="mb-0">{{ department.description|default:'(none)'|linebreaksbr }}</p>
+        </div>
+
+        <div class="on-card mt-3">
+            <h2 class="h5">Teams ({{ teams|length }})</h2>
+            {% if teams %}
+                <ul class="list-unstyled mb-0">
+                    {% for t in teams %}
+                        <li class="d-flex justify-content-between border-bottom py-2">
+                            <a href="{% url 'teams:detail' t.slug %}">{{ t.name }}</a>
+                            <span class="on-pill">
+                                {{ t.manager.get_display_name|default:'no manager' }}
+                            </span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">No teams in this department yet.</p>
+            {% endif %}
+        </div>
+
+        <div class="on-card mt-3">
+            <h2 class="h5">Recent projects</h2>
+            {% if projects %}
+                <ul class="list-unstyled mb-0">
+                    {% for p in projects %}
+                        <li class="d-flex justify-content-between border-bottom py-1">
+                            <span>{{ p.name }}</span>
+                            <span class="on-pill">{{ p.get_status_display }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted mb-0">No projects yet.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="on-card">
+            <h2 class="h5">Department head</h2>
+            {% if heads %}
+                {% for h in heads %}
+                    <p class="mb-1">{{ h.user.get_display_name }}</p>
+                    <p class="small text-muted mb-0">
+                        Appointed {{ h.appointed|date:'d M Y' }}
+                    </p>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted mb-0">No department head appointed.</p>
+            {% endif %}
+        </div>
+
+        <div class="on-card mt-3">
+            <h2 class="h5">Focus area</h2>
+            <p class="mb-0">{{ department.focus_area.name|default:'(none)' }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}{{ team.name }} dependencies{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="small mb-2">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="{% url 'teams:list' %}">Teams</a></li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'teams:detail' team.slug %}">{{ team.name }}</a>
+        </li>
+        <li class="breadcrumb-item active">Dependencies</li>
+    </ol>
+</nav>
+
+<h1 class="h3">{{ team.name }} - dependency graph</h1>
+
+<div class="row g-3 mt-2">
+    <div class="col-md-6">
+        <div class="on-card">
+            <h2 class="h5">Upstream <small class="text-muted">(this team depends on)</small></h2>
+            {% if upstream %}
+                <ul class="mb-0">
+                    {% for d in upstream %}
+                        <li>
+                            <a href="{% url 'teams:detail' d.upstream.slug %}">
+                                {{ d.upstream.name }}
+                            </a>
+                            <span class="on-pill ms-2">{{ d.get_dependency_type_display }}</span>
+                            {% if d.description %}
+                                <p class="small text-muted mb-0">{{ d.description }}</p>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted mb-0">No upstream dependencies.</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="on-card">
+            <h2 class="h5">Downstream <small class="text-muted">(teams depending on this one)</small></h2>
+            {% if downstream %}
+                <ul class="mb-0">
+                    {% for d in downstream %}
+                        <li>
+                            <a href="{% url 'teams:detail' d.downstream.slug %}">
+                                {{ d.downstream.name }}
+                            </a>
+                            <span class="on-pill ms-2">{{ d.get_dependency_type_display }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted mb-0">No downstream dependencies.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a class="btn btn-on" href="{% url 'teams:dependency_create' team.slug %}">
+        <i class="bi bi-plus-lg"></i> Add dependency
+    </a>
+</div>
+{% endblock %}

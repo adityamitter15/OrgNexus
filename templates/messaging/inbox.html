@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Inbox{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3">Inbox</h1>
+    <a class="btn btn-on" href="{% url 'messaging:create' %}">
+        <i class="bi bi-pencil"></i> New message
+    </a>
+</div>
+
+<div class="d-flex gap-2 mb-3 small">
+    <a href="{% url 'messaging:inbox' %}" class="on-pill">Inbox</a>
+    <a href="{% url 'messaging:sent' %}" class="text-decoration-none">Sent</a>
+    <a href="{% url 'messaging:drafts' %}" class="text-decoration-none">Drafts</a>
+</div>
+
+{% if rows %}
+    <div class="on-card">
+        <table class="on-table w-100">
+            <thead>
+                <tr><th>From</th><th>Subject</th><th>Received</th></tr>
+            </thead>
+            <tbody>
+                {% for r in rows %}
+                    <tr style="{% if r.is_read %}opacity:.7{% endif %}">
+                        <td>{{ r.message.sender.get_display_name }}</td>
+                        <td>
+                            <a href="{% url 'messaging:detail' r.message.pk %}">
+                                {% if not r.is_read %}<strong>{{ r.message.subject }}</strong>
+                                {% else %}{{ r.message.subject }}{% endif %}
+                            </a>
+                        </td>
+                        <td class="small text-muted">
+                            {{ r.message.sent_at|date:'d M H:i' }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="on-card text-center py-5">
+        <p class="text-muted mb-0">Your inbox is empty.</p>
+    </div>
+{% endif %}
+{% endblock %}

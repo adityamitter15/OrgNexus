@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Search{% endblock %}
+
+{% block content %}
+<h1 class="h3">Search results for "{{ q }}"</h1>
+
+{% if not q %}
+    <p class="text-muted">Type something into the search box in the navbar.</p>
+{% else %}
+    <section class="mb-4">
+        <h2 class="h5">Teams ({{ teams|length }})</h2>
+        {% if teams %}
+            <ul class="list-unstyled">
+                {% for t in teams %}
+                    <li class="py-1">
+                        <a href="{% url 'teams:detail' t.slug %}">{{ t.name }}</a>
+                        <small class="text-muted">- {{ t.department.name }}</small>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-muted">No teams match.</p>
+        {% endif %}
+    </section>
+
+    <section class="mb-4">
+        <h2 class="h5">Departments ({{ depts|length }})</h2>
+        {% if depts %}
+            <ul class="list-unstyled">
+                {% for d in depts %}
+                    <li class="py-1">
+                        <a href="{% url 'organisation:department_detail' d.slug %}">{{ d.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-muted">No departments match.</p>
+        {% endif %}
+    </section>
+
+    <section>
+        <h2 class="h5">People ({{ people|length }})</h2>
+        {% if people %}
+            <ul class="list-unstyled">
+                {% for p in people %}
+                    <li class="py-1">
+                        <strong>{{ p.get_display_name }}</strong>
+                        <small class="text-muted">{{ p.job_title }} - {{ p.email }}</small>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-muted">No people match.</p>
+        {% endif %}
+    </section>
+{% endif %}
+{% endblock %}

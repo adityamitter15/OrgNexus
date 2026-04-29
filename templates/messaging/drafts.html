@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Drafts{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-3">Drafts</h1>
+
+<div class="d-flex gap-2 mb-3 small">
+    <a href="{% url 'messaging:inbox' %}" class="text-decoration-none">Inbox</a>
+    <a href="{% url 'messaging:sent' %}" class="text-decoration-none">Sent</a>
+    <a href="{% url 'messaging:drafts' %}" class="on-pill">Drafts</a>
+</div>
+
+{% if messages_list %}
+    <div class="on-card">
+        <table class="on-table w-100">
+            <thead><tr><th>Subject</th><th>Saved</th><th></th></tr></thead>
+            <tbody>
+                {% for m in messages_list %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'messaging:detail' m.pk %}">{{ m.subject }}</a>
+                        </td>
+                        <td class="small text-muted">{{ m.created_at|date:'d M H:i' }}</td>
+                        <td class="text-end">
+                            <form action="{% url 'messaging:send_draft' m.pk %}"
+                                  method="post" class="d-inline">
+                                {% csrf_token %}
+                                <button class="btn btn-sm btn-on">Send</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="on-card text-center py-4">
+        <p class="text-muted mb-0">No drafts saved.</p>
+    </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,186 @@
+/* File: static/css/orgnexus.css - Aditya Mitter (W19869650)
+ *
+ * Custom styles on top of Bootstrap 5. Colour palette taken from the
+ * CW1 hi-fidelity mockups (image10/11/12) - deep teal primary with a
+ * cool, low-contrast workspace background.
+ */
+
+:root {
+    --on-primary: #1b4965;
+    --on-primary-dark: #133649;
+    --on-primary-soft: #e6eef4;
+    --on-bg: #f4f6fb;
+    --on-text: #111827;
+    --on-muted: #6b7280;
+    --on-card: #ffffff;
+    --on-border: #e5e7eb;
+    --on-accent-green: #1f9d55;
+    --on-accent-purple: #6f42c1;
+    --on-accent-orange: #d97706;
+}
+
+html, body { height: 100%; }
+
+.on-body {
+    background: var(--on-bg);
+    color: var(--on-text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.5;
+}
+
+/* Navbar -----------------------------------------------------------*/
+.on-navbar { border-bottom: 1px solid var(--on-border); }
+
+.on-logo-dot {
+    display: inline-block;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--on-primary);
+    box-shadow: 0 0 0 4px var(--on-primary-soft);
+}
+
+.on-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.on-avatar-initials {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--on-primary);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+/* Buttons ----------------------------------------------------------*/
+.btn-on {
+    background: var(--on-primary);
+    color: #fff;
+    border-radius: 0.5rem;
+    border: none;
+}
+.btn-on:hover, .btn-on:focus {
+    background: var(--on-primary-dark);
+    color: #fff;
+}
+
+.btn-on-outline {
+    border: 1px solid var(--on-primary);
+    color: var(--on-primary);
+    background: transparent;
+    border-radius: 0.5rem;
+}
+.btn-on-outline:hover {
+    background: var(--on-primary-soft);
+}
+
+/* Cards & tiles ----------------------------------------------------*/
+.on-card {
+    background: var(--on-card);
+    border: 1px solid var(--on-border);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, .04);
+}
+.on-card h2, .on-card h3 { margin-top: 0; }
+
+.on-stat {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--on-primary);
+    margin-bottom: 0;
+}
+.on-stat-label {
+    color: var(--on-muted);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.on-stat-green  .on-stat { color: var(--on-accent-green); }
+.on-stat-purple .on-stat { color: var(--on-accent-purple); }
+.on-stat-orange .on-stat { color: var(--on-accent-orange); }
+
+/* Hero / auth pages ------------------------------------------------*/
+.on-auth-card {
+    max-width: 480px;
+    margin: 3rem auto;
+    background: var(--on-card);
+    border-radius: 1rem;
+    padding: 2rem;
+    border: 1px solid var(--on-border);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, .05);
+}
+.on-auth-card h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Tables -----------------------------------------------------------*/
+.on-table {
+    background: var(--on-card);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    border: 1px solid var(--on-border);
+}
+.on-table thead {
+    background: var(--on-primary-soft);
+    color: var(--on-primary);
+    font-weight: 600;
+}
+.on-table th, .on-table td {
+    padding: .75rem 1rem;
+    border-bottom: 1px solid var(--on-border);
+}
+.on-table tr:last-child td { border-bottom: none; }
+
+/* Pills / badges ---------------------------------------------------*/
+.on-pill {
+    display: inline-block;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    background: var(--on-primary-soft);
+    color: var(--on-primary);
+    font-size: 0.85rem;
+}
+
+/* Footer -----------------------------------------------------------*/
+.on-footer {
+    background: var(--on-card);
+    border-top: 1px solid var(--on-border);
+}
+
+/* Alerts -----------------------------------------------------------*/
+.on-alert.alert-info    { border-left: 4px solid var(--on-primary); }
+.on-alert.alert-success { border-left: 4px solid var(--on-accent-green); }
+.on-alert.alert-warning { border-left: 4px solid var(--on-accent-orange); }
+.on-alert.alert-error,
+.on-alert.alert-danger  { border-left: 4px solid #dc2626; }
+
+/* Org structure tree -----------------------------------------------*/
+.on-tree-dept {
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.25rem;
+    border-left: 3px solid var(--on-primary);
+    background: var(--on-card);
+    border-radius: 0 0.5rem 0.5rem 0;
+}
+.on-tree-team-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+.on-tree-team {
+    padding: 0.5rem 0.75rem;
+    background: var(--on-primary-soft);
+    border-radius: 0.5rem;
+    text-decoration: none;
+    color: var(--on-primary);
+}
+.on-tree-team:hover { background: #d4e2ee; }

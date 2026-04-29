@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{% if form.instance.pk %}Edit team{% else %}New team{% endif %}{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-3">
+    {% if form.instance.pk %}Edit team: {{ form.instance.name }}{% else %}New team{% endif %}
+</h1>
+
+<form method="post" class="on-card">
+    {% csrf_token %}
+    <div class="row g-3">
+        {% for field in form %}
+            <div class="col-md-6">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                    <div class="form-text">{{ field.help_text|safe }}</div>
+                {% endif %}
+                {% if field.errors %}
+                    <div class="form-text text-danger">{{ field.errors|striptags }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="mt-3 d-flex gap-2">
+        <button type="submit" class="btn btn-on">
+            {% if form.instance.pk %}Save changes{% else %}Create team{% endif %}
+        </button>
+        <a class="btn btn-link"
+           href="{% if form.instance.pk %}{% url 'teams:detail' form.instance.slug %}{% else %}{% url 'teams:list' %}{% endif %}">
+            Cancel
+        </a>
+    </div>
+</form>
+{% endblock %}

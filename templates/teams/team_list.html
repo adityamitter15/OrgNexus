@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Teams{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3">Teams</h1>
+    <a class="btn btn-on" href="{% url 'teams:create' %}">
+        <i class="bi bi-plus-lg"></i> New team
+    </a>
+</div>
+
+<form method="get" class="on-card mb-3 d-flex flex-wrap gap-2 align-items-end">
+    <div class="flex-grow-1">
+        <label class="form-label small text-muted" for="q">Search</label>
+        <input id="q" name="q" type="search" class="form-control"
+               value="{{ q }}" placeholder="name, manager, slack channel...">
+    </div>
+    <div>
+        <label class="form-label small text-muted" for="department">Department</label>
+        <select id="department" name="department" class="form-select">
+            <option value="">All departments</option>
+            {% for d in departments %}
+                <option value="{{ d.slug }}"
+                        {% if d.slug == selected_dept %}selected{% endif %}>
+                    {{ d.name }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-on">Filter</button>
+</form>
+
+{% if teams %}
+    <div class="row g-3">
+        {% for team in teams %}
+            <div class="col-md-6 col-lg-4">
+                <div class="on-card h-100">
+                    <h2 class="h5 mb-1">
+                        <a href="{% url 'teams:detail' team.slug %}">{{ team.name }}</a>
+                    </h2>
+                    <p class="text-muted small mb-2">
+                        {{ team.department.name }}
+                        {% if team.team_type %}
+                            &middot; {{ team.team_type.type_name }}
+                        {% endif %}
+                    </p>
+                    <p class="mb-2">{{ team.mission|truncatewords:25 }}</p>
+                    <div class="small text-muted">
+                        <i class="bi bi-person-circle"></i>
+                        {% if team.manager %}
+                            {{ team.manager.get_display_name }}
+                        {% else %}
+                            <em>no manager assigned</em>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?page={{ page_obj.previous_page_number }}{% if q %}&q={{ q }}{% endif %}">
+                            Previous
+                        </a>
+                    </li>
+                {% endif %}
+                <li class="page-item active">
+                    <span class="page-link">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                    </span>
+                </li>
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?page={{ page_obj.next_page_number }}{% if q %}&q={{ q }}{% endif %}">
+                            Next
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+{% else %}
+    <div class="on-card text-center py-5">
+        <p class="text-muted mb-2">No teams to show.</p>
+        <a class="btn btn-on" href="{% url 'teams:create' %}">Add the first team</a>
+    </div>
+{% endif %}
+{% endblock %}

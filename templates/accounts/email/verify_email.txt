@@ -1,0 +1,12 @@
+Hi {{ user.get_display_name }},
+
+Welcome to OrgNexus.
+
+Confirm your email address by opening this link:
+
+    {{ link }}
+
+If you didn't create an account, you can safely ignore this email.
+
+Thanks,
+The {{ site }} team

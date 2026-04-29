@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}{{ meeting.title }}{% endblock %}
+
+{% block content %}
+<a class="small text-muted" href="{% url 'scheduler:upcoming' %}">&larr; Back</a>
+
+<h1 class="h3 mt-2">{{ meeting.title }}</h1>
+<p class="text-muted">
+    {{ meeting.date_time|date:'D d M Y, H:i' }}
+    &middot; {{ meeting.duration_minutes }} min
+    {% if meeting.platform %} &middot; {{ meeting.platform }}{% endif %}
+    &middot; {{ meeting.get_recurrence_display }}
+</p>
+
+<div class="row g-3">
+    <div class="col-lg-8">
+        <div class="on-card">
+            <h2 class="h5">Agenda</h2>
+            <p class="mb-0">{{ meeting.agenda|default:'(no agenda set)'|linebreaksbr }}</p>
+            {% if meeting.location_url %}
+                <hr>
+                <a href="{{ meeting.location_url }}" class="btn btn-on">
+                    <i class="bi bi-camera-video"></i> Join meeting
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="on-card">
+            <h2 class="h5">Participants</h2>
+            <ul class="list-unstyled mb-0 small">
+                {% for p in participants %}
+                    <li class="d-flex justify-content-between">
+                        <span>{{ p.user.get_display_name }}</span>
+                        <span class="on-pill">{{ p.get_status_display }}</span>
+                    </li>
+                {% empty %}
+                    <li class="text-muted">No participants.</li>
+                {% endfor %}
+            </ul>
+
+            {% if my_invite %}
+                <hr>
+                <p class="small mb-2">My response:</p>
+                <div class="d-flex gap-2">
+                    <a class="btn btn-sm btn-on"
+                       href="{% url 'scheduler:respond' meeting.pk 'accepted' %}">
+                        Accept
+                    </a>
+                    <a class="btn btn-sm btn-outline-danger"
+                       href="{% url 'scheduler:respond' meeting.pk 'declined' %}">
+                        Decline
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Delete team{% endblock %}
+
+{% block content %}
+<div class="on-auth-card">
+    <h1>Delete team</h1>
+    <p class="text-muted">
+        Are you sure you want to delete <strong>{{ object.name }}</strong>?
+        This will also remove its memberships and dependency edges.
+    </p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete team</button>
+        <a class="btn btn-link" href="{% url 'teams:detail' object.slug %}">
+            Cancel
+        </a>
+    </form>
+</div>
+{% endblock %}

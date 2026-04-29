@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Reports{% endblock %}
+
+{% block content %}
+<h1 class="h3">Reports</h1>
+<p class="text-muted">
+    Quick exports of OrgNexus data. Both files render directly from the
+    live database, so they're always up to date.
+</p>
+
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="on-card text-center h-100">
+            <i class="bi bi-file-earmark-pdf fs-1 text-danger"></i>
+            <h2 class="h5 mt-2">Engineering portal report (PDF)</h2>
+            <p class="small text-muted">
+                One-page summary: departments, team counts, projects per
+                department, and any teams without a manager.
+            </p>
+            <a class="btn btn-on" href="{% url 'reports:pdf' %}">Download PDF</a>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="on-card text-center h-100">
+            <i class="bi bi-file-earmark-excel fs-1 text-success"></i>
+            <h2 class="h5 mt-2">Engineering portal data (Excel)</h2>
+            <p class="small text-muted">
+                Three sheets - Departments, Teams, Projects - so the
+                marker can pivot the data themselves.
+            </p>
+            <a class="btn btn-on" href="{% url 'reports:xlsx' %}">Download XLSX</a>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="on-card text-center h-100">
+            <i class="bi bi-exclamation-circle fs-1 text-warning"></i>
+            <h2 class="h5 mt-2">Teams without managers</h2>
+            <p class="small text-muted">
+                Quick HTML view - useful for filling gaps before the
+                next planning round.
+            </p>
+            <a class="btn btn-on-outline" href="{% url 'reports:orphans' %}">
+                View list
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

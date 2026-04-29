@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Edit profile{% endblock %}
+
+{% block content %}
+<div class="on-auth-card">
+    <h1>Edit profile</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="mb-3">
+                <label class="form-label" for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                </label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="form-text text-danger">{{ field.errors|striptags }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-on">Save</button>
+            <a class="btn btn-link"
+               href="{% url 'accounts:profile' %}">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

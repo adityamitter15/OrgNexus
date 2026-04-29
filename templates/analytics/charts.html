@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Analytics{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"
+        defer></script>
+{% endblock %}
+
+{% block content %}
+<h1 class="h3">Analytics</h1>
+<p class="text-muted">
+    Two simple charts driven by JSON endpoints (so the same data is
+    consumable by any other dashboard tool too).
+</p>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="on-card">
+            <h2 class="h5">Teams per department</h2>
+            <canvas id="teamsPerDept" height="220"></canvas>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="on-card">
+            <h2 class="h5">Projects per department</h2>
+            <canvas id="projectsPerDept" height="220"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    function load(url, canvasId, kind) {
+        fetch(url, { credentials: "same-origin" })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                new Chart(document.getElementById(canvasId).getContext("2d"), {
+                    type: kind,
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: "Count",
+                            data: data.values,
+                            backgroundColor: "#1b4965",
+                        }],
+                    },
+                    options: { responsive: true, maintainAspectRatio: false },
+                });
+            });
+    }
+    // Wait a tick so Chart.js has loaded.
+    setTimeout(function () {
+        load("{% url 'analytics:data_teams_per_dept' %}",   "teamsPerDept",   "bar");
+        load("{% url 'analytics:data_projects_per_dept' %}","projectsPerDept","bar");
+    }, 250);
+});
+</script>
+{% endblock %}

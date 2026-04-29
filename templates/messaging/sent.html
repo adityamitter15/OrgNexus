@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Sent{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-3">Sent messages</h1>
+
+<div class="d-flex gap-2 mb-3 small">
+    <a href="{% url 'messaging:inbox' %}" class="text-decoration-none">Inbox</a>
+    <a href="{% url 'messaging:sent' %}" class="on-pill">Sent</a>
+    <a href="{% url 'messaging:drafts' %}" class="text-decoration-none">Drafts</a>
+</div>
+
+{% if messages_list %}
+    <div class="on-card">
+        <table class="on-table w-100">
+            <thead><tr><th>Subject</th><th>Sent</th></tr></thead>
+            <tbody>
+                {% for m in messages_list %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'messaging:detail' m.pk %}">{{ m.subject }}</a>
+                        </td>
+                        <td class="small text-muted">{{ m.sent_at|date:'d M H:i' }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="on-card text-center py-4">
+        <p class="text-muted mb-0">Nothing sent yet.</p>
+    </div>
+{% endif %}
+{% endblock %}

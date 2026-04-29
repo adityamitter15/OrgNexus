@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="on-auth-card">
+    <h1>Delete message</h1>
+    <p class="text-muted">Permanently delete "{{ object.subject }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button class="btn btn-danger">Delete</button>
+        <a class="btn btn-link"
+           href="{% url 'messaging:detail' object.pk %}">Cancel</a>
+    </form>
+</div>
+{% endblock %}

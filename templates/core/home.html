@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+<section class="row align-items-center mt-4">
+    <div class="col-md-7">
+        <h1 class="display-5 fw-bold">OrgNexus</h1>
+        <p class="lead text-muted">
+            Sky's central registry of engineering teams - find people,
+            understand dependencies, and reach out without ever opening
+            a spreadsheet again.
+        </p>
+        <div class="d-flex gap-2 mt-3">
+            <a class="btn btn-on" href="{% url 'accounts:register' %}">
+                <i class="bi bi-person-plus"></i> Create an account
+            </a>
+            <a class="btn btn-on-outline" href="{% url 'accounts:login' %}">
+                <i class="bi bi-box-arrow-in-right"></i> Log in
+            </a>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="on-card mt-4 mt-md-0">
+            <h2 class="h5">What you can do here</h2>
+            <ul class="mb-0 ps-3">
+                <li>Discover engineering teams across departments</li>
+                <li>See managers, mission and contact channels at a glance</li>
+                <li>Trace upstream and downstream team dependencies</li>
+                <li>Send internal messages and schedule meetings</li>
+                <li>Export reports to PDF or Excel</li>
+            </ul>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 mb-1">Hello, {{ user.get_display_name }}</h1>
+        <p class="text-muted mb-0">Here's what's happening across the engineering org.</p>
+    </div>
+    <a class="btn btn-on" href="{% url 'teams:create' %}">
+        <i class="bi bi-plus-lg"></i> New team
+    </a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3">
+        <div class="on-card text-center">
+            <p class="on-stat">{{ counts.teams }}</p>
+            <p class="on-stat-label">Teams</p>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="on-card text-center on-stat-green">
+            <p class="on-stat">{{ counts.departments }}</p>
+            <p class="on-stat-label">Departments</p>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="on-card text-center on-stat-purple">
+            <p class="on-stat">{{ counts.dependencies }}</p>
+            <p class="on-stat-label">Dependencies</p>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="on-card text-center on-stat-orange">
+            <p class="on-stat">{{ counts.engineers }}</p>
+            <p class="on-stat-label">Engineers</p>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-7">
+        <div class="on-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 mb-0">Recent inbox</h2>
+                <a class="small" href="{% url 'messaging:inbox' %}">Open inbox</a>
+            </div>
+            {% if unread %}
+                <ul class="list-unstyled mb-0">
+                    {% for row in unread %}
+                        <li class="d-flex align-items-start gap-3 py-2 border-bottom">
+                            <span class="on-pill">From</span>
+                            <div class="flex-grow-1">
+                                <strong>{{ row.message.sender.get_display_name }}</strong>
+                                <a href="{% url 'messaging:detail' row.message.pk %}"
+                                   class="d-block text-truncate">
+                                    {{ row.message.subject }}
+                                </a>
+                            </div>
+                            <small class="text-muted">
+                                {{ row.message.sent_at|date:'d M' }}
+                            </small>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted mb-0">No unread messages.</p>
+            {% endif %}
+        </div>
+
+        <div class="on-card mt-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 mb-0">Upcoming meetings</h2>
+                <a class="small" href="{% url 'scheduler:upcoming' %}">All meetings</a>
+            </div>
+            {% if upcoming %}
+                <ul class="list-unstyled mb-0">
+                    {% for m in upcoming %}
+                        <li class="d-flex align-items-center gap-3 py-2 border-bottom">
+                            <i class="bi bi-calendar-event text-muted"></i>
+                            <div class="flex-grow-1">
+                                <a href="{% url 'scheduler:detail' m.pk %}">
+                                    {{ m.title }}
+                                </a>
+                                <div class="small text-muted">
+                                    {{ m.date_time|date:'D d M, H:i' }}
+                                    {% if m.platform %}
+                                        &middot; {{ m.platform }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted mb-0">Nothing on the calendar yet.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="on-card">
+            <h2 class="h5 mb-3">Largest departments</h2>
+            {% if top_depts %}
+                <ul class="list-unstyled mb-0">
+                    {% for d in top_depts %}
+                        <li class="d-flex justify-content-between py-2 border-bottom">
+                            <a href="{% url 'organisation:department_detail' d.slug %}">
+                                {{ d.name }}
+                            </a>
+                            <span class="on-pill">{{ d.num_teams }} teams</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted mb-0">
+                    No departments yet -
+                    <a href="/admin/organisation/department/add/">add one</a>.
+                </p>
+            {% endif %}
+        </div>
+
+        <div class="on-card mt-3">
+            <h2 class="h5 mb-3">Quick actions</h2>
+            <div class="d-flex flex-column gap-2">
+                <a class="btn btn-on-outline" href="{% url 'messaging:create' %}">
+                    <i class="bi bi-envelope-plus"></i> Send a message
+                </a>
+                <a class="btn btn-on-outline" href="{% url 'scheduler:create' %}">
+                    <i class="bi bi-calendar-plus"></i> Schedule a meeting
+                </a>
+                <a class="btn btn-on-outline" href="{% url 'reports:index' %}">
+                    <i class="bi bi-file-earmark-arrow-down"></i> Export reports
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

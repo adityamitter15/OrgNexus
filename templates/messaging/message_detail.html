@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ message.subject }}{% endblock %}
+
+{% block content %}
+<a class="small text-muted"
+   href="{% url 'messaging:inbox' %}">&larr; Back to inbox</a>
+
+<h1 class="h3 mt-2">{{ message.subject }}</h1>
+<p class="small text-muted">
+    From <strong>{{ message.sender.get_display_name }}</strong>
+    {% if message.sent_at %}
+        on {{ message.sent_at|date:'d M Y, H:i' }}
+    {% else %}
+        - draft, never sent
+    {% endif %}
+</p>
+
+<div class="on-card">
+    {{ message.body|linebreaksbr }}
+</div>
+
+<div class="mt-3 small text-muted">
+    Recipients:
+    {% for r in message.recipients.all %}
+        {{ r.recipient.get_display_name }}{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+</div>
+
+{% if message.sender_id == user.id %}
+    <form action="{% url 'messaging:delete' message.pk %}" method="post" class="mt-2">
+        {% csrf_token %}
+        <button class="btn btn-sm btn-outline-danger">Delete</button>
+    </form>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Schedule{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3">My schedule</h1>
+    <a class="btn btn-on" href="{% url 'scheduler:create' %}">
+        <i class="bi bi-calendar-plus"></i> New meeting
+    </a>
+</div>
+
+<div class="d-flex gap-2 mb-3 small">
+    <a href="{% url 'scheduler:upcoming' %}" class="on-pill">Upcoming</a>
+    <a href="{% url 'scheduler:week' %}" class="text-decoration-none">This week</a>
+    <a href="{% url 'scheduler:month' %}" class="text-decoration-none">This month</a>
+</div>
+
+{% if meetings %}
+    <div class="on-card">
+        <table class="on-table w-100">
+            <thead>
+                <tr><th>Title</th><th>When</th><th>Platform</th></tr>
+            </thead>
+            <tbody>
+                {% for m in meetings %}
+                    <tr>
+                        <td><a href="{% url 'scheduler:detail' m.pk %}">{{ m.title }}</a></td>
+                        <td class="small">{{ m.date_time|date:'D d M, H:i' }}</td>
+                        <td class="small text-muted">{{ m.platform|default:'-' }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="on-card text-center py-4">
+        <p class="text-muted mb-0">Nothing scheduled yet.</p>
+    </div>
+{% endif %}
+{% endblock %}
