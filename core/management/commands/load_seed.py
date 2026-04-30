@@ -145,7 +145,8 @@ class Command(BaseCommand):
             agile = _coerce_text(row[col["Agile Practices"]] if col.get(
                 "Agile Practices") is not None else "")
             dep_type = (row[col["Dependency Type"]] or "").strip()
-            downstream_name = (row[col["Downstream Dependencies"]] or "").strip()
+            # downstream_name is read in pass 2 directly off the row,
+            # so we don't need a local for it here.
             skills_blob = (row[col["Key Skills & Technologies"]] or "").strip()
 
             if not dept_name or not team_name:

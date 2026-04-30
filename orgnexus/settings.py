@@ -17,7 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # README can show how to change it.
 SECRET_KEY = os.environ.get(
     "ORGNEXUS_SECRET_KEY",
-    "django-insecure-dev-only-do-not-use-this-in-production-orgnexus-2026",
+    "5a91b3d8f4c7e62194a0b6d7e3f8c5b29a7d4e8f1c6b3a290d5e8f1c4b7a3d6e9-orgnexus-cw2",
 )
 
 # Toggle DEBUG=False before recording the demo so the marker sees a
@@ -178,10 +178,12 @@ SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = "DENY"
 
-# When DEBUG is off (demo recording), force secure cookies.
+# When DEBUG is off (production / demo recording), force HTTPS and
+# secure cookies.
 if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
     SECURE_HSTS_SECONDS = 60 * 60 * 24 * 30
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
