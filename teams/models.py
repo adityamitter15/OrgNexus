@@ -1,4 +1,4 @@
-# File: teams/models.py - Aditya Mitter (W19869650)
+# File: teams/models.py - Aditya Mitter
 """Team domain - this is my (Aditya's) main individual element.
 
 Models in this file:

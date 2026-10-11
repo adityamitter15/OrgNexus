@@ -1,4 +1,4 @@
-# File: scheduler/models.py - Aditya Mitter (W19869650)
+# File: scheduler/models.py - Aditya Mitter
 """Meeting scheduler - matches the brief's 'Schedule' menu items.
 
 A Meeting has a single creator and a M2M of participants via the

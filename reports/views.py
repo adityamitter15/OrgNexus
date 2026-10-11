@@ -1,4 +1,4 @@
-# File: reports/views.py - Aditya Mitter (W19869650)
+# File: reports/views.py - Aditya Mitter
 """PDF + Excel exports plus a 'teams without managers' helper.
 
 Closes one of the brief's optional functional groups (Reports). PDFs

@@ -1,4 +1,4 @@
-# File: accounts/tests.py - Aditya Mitter (W19869650)
+# File: accounts/tests.py - Aditya Mitter
 """Test plan rows for the auth flow.
 
 Each test method's docstring is the row we transcribe into the report's

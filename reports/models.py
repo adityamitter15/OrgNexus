@@ -1,4 +1,4 @@
-# File: reports/models.py - Aditya Mitter (W19869650)
+# File: reports/models.py - Aditya Mitter
 """Project entity used by the reports + analytics views.
 
 The brief's 'Reports' page lists 'number of teams', 'summary' and

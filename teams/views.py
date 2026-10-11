@@ -1,4 +1,4 @@
-# File: teams/views.py - Aditya Mitter (W19869650)
+# File: teams/views.py - Aditya Mitter
 """Team menu - my (Aditya's) main individual element.
 
 Maps to the brief's group-of-N split, slot 1: Team display, search,

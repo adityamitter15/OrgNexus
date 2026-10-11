@@ -1,4 +1,4 @@
-# File: scheduler/views.py - Aditya Mitter (W19869650)
+# File: scheduler/views.py - Aditya Mitter
 """Schedule menu - meeting CRUD plus weekly/monthly/upcoming views."""
 
 from datetime import timedelta

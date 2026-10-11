@@ -1,4 +1,4 @@
-# File: teams/forms.py - Aditya Mitter (W19869650)
+# File: teams/forms.py - Aditya Mitter
 
 from django import forms
 

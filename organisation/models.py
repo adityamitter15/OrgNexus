@@ -1,4 +1,4 @@
-# File: organisation/models.py - Aditya Mitter (W19869650) and Noah Gil De Matos Jimenez
+# File: organisation/models.py - Aditya Mitter and Noah Gil De Matos Jimenez
 """Department / FocusArea / TeamType / DepartmentHead schema.
 
 Closes the entities the marker said were missing in CW1: FocusArea and

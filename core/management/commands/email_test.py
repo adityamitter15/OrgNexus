@@ -1,4 +1,4 @@
-# File: core/management/commands/email_test.py - Aditya Mitter (W19869650)
+# File: core/management/commands/email_test.py - Aditya Mitter
 """Sanity-check the configured email backend.
 
 Sends a one-line message to the address given on the command line so we

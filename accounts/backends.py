@@ -1,4 +1,4 @@
-# File: accounts/backends.py - Aditya Mitter (W19869650)
+# File: accounts/backends.py - Aditya Mitter
 """Auth backend that lets users sign in with either their username
 or their email. Bolted on top of Django's ModelBackend so we keep
 permission lookups and the password hasher chain unchanged."""

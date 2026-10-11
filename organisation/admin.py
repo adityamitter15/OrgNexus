@@ -1,4 +1,4 @@
-# File: organisation/admin.py - Aditya Mitter (W19869650)
+# File: organisation/admin.py - Aditya Mitter
 
 from django.contrib import admin
 

@@ -5,7 +5,7 @@ engineering teams. Built for **5COSC021W Software Development Group
 Project (CW2)** at the University of Westminster.
 
 **Group 5CS13_C**
-- Aditya Mitter (W19869650)
+- Aditya Mitter
 - Noah Gil De Matos Jimenez
 
 ---

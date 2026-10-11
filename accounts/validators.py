@@ -1,4 +1,4 @@
-# File: accounts/validators.py - Aditya Mitter (W19869650)
+# File: accounts/validators.py - Aditya Mitter
 """High-end password validators wired into AUTH_PASSWORD_VALIDATORS.
 
 Each class follows Django's validator protocol:

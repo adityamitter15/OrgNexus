@@ -1,4 +1,4 @@
-# File: scheduler/tests.py - Aditya Mitter (W19869650)
+# File: scheduler/tests.py - Aditya Mitter
 
 from django.test import TestCase
 from django.urls import reverse

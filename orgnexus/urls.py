@@ -1,4 +1,4 @@
-# File: orgnexus/urls.py - Aditya Mitter (W19869650)
+# File: orgnexus/urls.py - Aditya Mitter
 """Top-level URL router. Each app keeps its own urls.py so ownership
 between team members is clear."""
 

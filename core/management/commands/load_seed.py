@@ -1,4 +1,4 @@
-# File: core/management/commands/load_seed.py - Aditya Mitter (W19869650)
+# File: core/management/commands/load_seed.py - Aditya Mitter
 """Populate the database from Sky's team registry spreadsheet.
 
 We read `04_team_data/team_registry.xlsx` (or any path passed in via

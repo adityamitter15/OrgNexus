@@ -1,4 +1,4 @@
-# File: accounts/models.py - Aditya Mitter (W19869650)
+# File: accounts/models.py - Aditya Mitter
 """User model for OrgNexus.
 
 The brief says single user category, so the only thing we extend on top

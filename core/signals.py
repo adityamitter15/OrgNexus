@@ -1,4 +1,4 @@
-# File: core/signals.py - Aditya Mitter (W19869650)
+# File: core/signals.py - Aditya Mitter
 """Single signal handler that turns ORM saves and deletes into AuditLog rows.
 
 Only the tables that match the brief's 'audit trail of edits' phrasing

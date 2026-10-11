@@ -1,4 +1,4 @@
-# File: teams/tests.py - Aditya Mitter (W19869650)
+# File: teams/tests.py - Aditya Mitter
 """Tests for the Team menu - my (Aditya's) individual element."""
 
 from django.db import IntegrityError

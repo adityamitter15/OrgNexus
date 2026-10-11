@@ -1,4 +1,4 @@
-# File: analytics/views.py - Aditya Mitter (W19869650)
+# File: analytics/views.py - Aditya Mitter
 """Chart.js endpoints. The HTML page draws the canvases, the JSON
 endpoints feed them. Keeping data and view separate means the marker
 can hit /analytics/data/... and inspect the raw figures."""

@@ -1,4 +1,4 @@
-# File: core/middleware.py - Aditya Mitter (W19869650)
+# File: core/middleware.py - Aditya Mitter
 """Tiny middleware that stashes the current user on a thread-local so
 the audit-log signals can pick up who did the action.
 

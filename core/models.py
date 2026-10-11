@@ -1,4 +1,4 @@
-# File: core/models.py - Aditya Mitter (W19869650)
+# File: core/models.py - Aditya Mitter
 """Cross-cutting models that don't belong to one app.
 
 AuditLog is the explicit 'audit trail of edits and updates' the brief

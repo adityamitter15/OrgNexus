@@ -1,4 +1,4 @@
-# File: accounts/urls.py - Aditya Mitter (W19869650)
+# File: accounts/urls.py - Aditya Mitter
 """Auth-related URL routes. Covers every CW1 'missing use case':
 Login / Logout / Register / Update Profile / Change Password / Reset Password.
 """

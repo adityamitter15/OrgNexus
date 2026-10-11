@@ -1,4 +1,4 @@
-# File: core/views.py - Aditya Mitter (W19869650)
+# File: core/views.py - Aditya Mitter
 """Cross-cutting views: home, dashboard, global search, error pages."""
 
 from django.contrib.auth.decorators import login_required

@@ -1,4 +1,4 @@
-// File: static/js/orgnexus.js - Aditya Mitter (W19869650)
+// File: static/js/orgnexus.js - Aditya Mitter
 // Tiny vanilla helpers - we keep JS minimal so the marker can read it
 // without setting up a build step.
 

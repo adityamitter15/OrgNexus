@@ -1,4 +1,4 @@
-# File: core/urls.py - Aditya Mitter (W19869650)
+# File: core/urls.py - Aditya Mitter
 
 from django.urls import path
 

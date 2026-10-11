@@ -1,4 +1,4 @@
-# File: accounts/forms.py - Aditya Mitter (W19869650)
+# File: accounts/forms.py - Aditya Mitter
 """ModelForm + auth forms wired with Bootstrap classes."""
 
 from django import forms

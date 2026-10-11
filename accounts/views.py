@@ -1,4 +1,4 @@
-# File: accounts/views.py - Aditya Mitter (W19869650)
+# File: accounts/views.py - Aditya Mitter
 """Auth flow views.
 
 Highlights for the report:

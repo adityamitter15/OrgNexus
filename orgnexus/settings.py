@@ -1,4 +1,4 @@
-# File: orgnexus/settings.py - Aditya Mitter (W19869650)
+# File: orgnexus/settings.py - Aditya Mitter
 """Project settings for OrgNexus.
 
 This file is the single place we configure Django, security, the auth

@@ -1,4 +1,4 @@
-# File: accounts/admin.py - Aditya Mitter (W19869650)
+# File: accounts/admin.py - Aditya Mitter
 
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
